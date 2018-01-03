@@ -62,6 +62,14 @@ display_options():-
 	write("2 - Trash"), nl,
 	write("3 - Pass"), nl.
 
+get_max([X],X).
+get_max([X,Y|T],MAX) :- X>Y, get_max([X|T],MAX).
+get_max([X,Y|T],MAX) :- X=<Y, get_max([Y|T],MAX).
+
+get_max_score(MaxScore):-
+    findall(Score, (song(_, Gender, Language, Group), calculate_score(Gender, Language, Group, Score)), Scores),
+    get_max(Scores, MaxScore).
+
 calculate_score(Gender, Language, Group, Score):-
     label(Gender, GenderScore),
     label(Language, LanguageScore),
