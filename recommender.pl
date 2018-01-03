@@ -38,12 +38,6 @@ increase_score([Label|Rest]) :-
 	assert(label(Label, N+1)),
 	increase_score(Rest).
 	
-delete_labels([]).
-delete_labels([Label|Rest]) :-
-	label(Label, N),
-	retract(label(Label,N)),
-	delete_labels(Rest).
-	
 decrease_labels([]).
 decrease_labels([Label|Rest]) :-
 	label(Label, N),
