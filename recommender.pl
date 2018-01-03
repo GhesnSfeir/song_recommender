@@ -62,10 +62,16 @@ display_options():-
 	write("2 - Trash"), nl,
 	write("3 - Pass"), nl.
 
+calculate_score(Gender, Language, Group, Score):-
+    label(Gender, GenderScore),
+    label(Language, LanguageScore),
+    label(Group, GroupScore),
+    Score is GenderScore + LanguageScore + GroupScore.
+
 fetch_recommended_song(SongName, SongGender, SongLanguage, SongGroup, SongScore):-
     findall(
         (Song, Gender, Language, Group, Score),
-        (song(Song, Gender, Language, Group), label(Gender, X1), label(Language, X2), label(Group, X3), Score is X1+X2+X3),
+        (song(Song, Gender, Language, Group), calculate_score(Gender, Language, Group, Score)),
         Songlist),
     length(Songlist, Length),
     random(0, Length, Index),
