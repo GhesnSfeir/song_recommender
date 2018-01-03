@@ -19,14 +19,15 @@
 /* label(name, points). */
 
 :- dynamic label/2.
+:- dynamic song/4.
 
 valid_song(Name, G,L,Gr) :- song(Name,G,L,Gr), label(G,_), label(L,_), label(Gr,_).
 
-ask_input(Labels) :-
+ask_input(Labels, SongName) :-
 	repeat,
 	read(Option),
 	(Option == 1 ->  !, nl, increase_score(Labels);
-	Option == 2 -> !, nl, delete_labels(Labels);
+	Option == 2 -> !, nl, decrease_labels(Labels), delete_song(SongName);
 	Option == 3 -> !, nl;
 	write("Invalid option.") -> nl, fail).
 
@@ -43,11 +44,14 @@ delete_labels([Label|Rest]) :-
 	retract(label(Label,N)),
 	delete_labels(Rest).
 	
-delete_labels([]).
-delete_labels([Label|Rest]) :-
+decrease_labels([]).
+decrease_labels([Label|Rest]) :-
 	label(Label, N),
 	retract(label(Label,N)),
-	delete_labels(Rest).
+    assert(label(Label, N-1)),
+	decrease_labels(Rest).
+
+delete_song(SongName) :- retract(song(SongName,_,_,_)).
 	
 	
 display_song(SongName, SongGroup, SongScore):-
@@ -80,5 +84,5 @@ main() :-
     display_song(SongName, SongGroup, SongScore),
     display_options(),
 	
-	ask_input([SongGender, SongLanguage, SongGroup]),
+	ask_input([SongGender, SongLanguage, SongGroup], SongName),
 	fail.
