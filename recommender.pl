@@ -27,7 +27,7 @@ ask_input(Labels, SongName) :-
 	repeat,
 	read(Option),
 	(Option == 1 ->  !, nl, increase_score(Labels);
-	Option == 2 -> !, nl, decrease_labels(Labels), delete_song(SongName);
+	Option == 2 -> !, nl, decrease_score(Labels), delete_song(SongName);
 	Option == 3 -> !, nl;
 	write("Invalid option.") -> nl, fail).
 
@@ -38,12 +38,12 @@ increase_score([Label|Rest]) :-
 	assert(label(Label, N+1)),
 	increase_score(Rest).
 	
-decrease_labels([]).
-decrease_labels([Label|Rest]) :-
+decrease_score([]).
+decrease_score([Label|Rest]) :-
 	label(Label, N),
 	retract(label(Label,N)),
     assert(label(Label, N-1)),
-	decrease_labels(Rest).
+	decrease_score(Rest).
 
 delete_song(SongName) :- retract(song(SongName,_,_,_)).
 	
