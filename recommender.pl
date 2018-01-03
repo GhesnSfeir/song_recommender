@@ -26,7 +26,7 @@ valid_song(Name, G,L,Gr) :- song(Name,G,L,Gr), label(G,_), label(L,_), label(Gr,
 ask_input(Labels, SongName) :-
 	repeat,
 	read(Option),
-	(Option == 1 ->  !, nl, increase_score(Labels);
+	(Option == 1 ->  !, nl, increase_score(Labels), delete_song(SongName);
 	Option == 2 -> !, nl, decrease_score(Labels), delete_song(SongName);
 	Option == 3 -> !, nl;
 	write("Invalid option.") -> nl, fail).
