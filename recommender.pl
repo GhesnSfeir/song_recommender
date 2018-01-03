@@ -20,20 +20,7 @@
 
 :- dynamic label/2.
 
-label("rock", 0).
-label("ska", 0).
-label("house", 0).
-
-label("Spanish", 0).
-label("English", 0).
-label("none", 0).
-
-label("ACDC", 0).
-label("La Pegatina", 0).
-
 valid_song(Name, G,L,Gr) :- song(Name,G,L,Gr), label(G,_), label(L,_), label(Gr,_).
-song("Back in black", "rock", "English", "ACDC").
-song("Tomasin", "ska", "Spanish", "La Pegatina").
 
 ask_input(Labels) :-
 	repeat,
