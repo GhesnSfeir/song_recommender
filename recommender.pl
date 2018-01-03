@@ -77,9 +77,10 @@ calculate_score(Gender, Language, Group, Score):-
     Score is GenderScore + LanguageScore + GroupScore.
 
 fetch_recommended_song(SongName, SongGender, SongLanguage, SongGroup, SongScore):-
+    get_max_score(MaxScore),
     findall(
         (Song, Gender, Language, Group, Score),
-        (song(Song, Gender, Language, Group), calculate_score(Gender, Language, Group, Score)),
+        (song(Song, Gender, Language, Group), calculate_score(Gender, Language, Group, Score), Score = MaxScore),
         Songlist),
     length(Songlist, Length),
     random(0, Length, Index),
