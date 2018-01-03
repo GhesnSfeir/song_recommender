@@ -43,15 +43,42 @@ delete_labels([Label|Rest]) :-
 	retract(label(Label,N)),
 	delete_labels(Rest).
 	
+delete_labels([]).
+delete_labels([Label|Rest]) :-
+	label(Label, N),
+	retract(label(Label,N)),
+	delete_labels(Rest).
 	
+	
+display_song(SongName, SongGroup, SongScore):-
+    write("Now playing: "),
+    write(SongName),
+    write(", by "),
+    write(SongGroup),
+    write(". Score: "),
+    write(SongScore),
+    nl.
+
+display_options():-
+	write("1 - Like"), nl,
+	write("2 - Trash"), nl,
+	write("3 - Pass"), nl.
+
+fetch_recommended_song(SongName, SongGender, SongLanguage, SongGroup, SongScore):-
+    findall(
+        (Song, Gender, Language, Group, Score),
+        (song(Song, Gender, Language, Group), label(Gender, X1), label(Language, X2), label(Group, X3), Score is X1+X2+X3),
+        Songlist),
+    length(Songlist, Length),
+    random(0, Length, Index),
+    nth0(Index, Songlist, (SongName, SongGender, SongLanguage, SongGroup, SongScore)).
 
 main() :-
 	repeat,
-	valid_song(Name, G, L, Gr),
-	write("Now playing: "), write(Name), write(", by "), write(Gr), nl,
-	write("1 - Like"), nl,
-	write("2 - Trash"), nl,
-	write("3 - Pass"), nl,
+    
+    fetch_recommended_song(SongName, SongGender, SongLanguage, SongGroup, SongScore),
+    display_song(SongName, SongGroup, SongScore),
+    display_options(),
 	
-	ask_input([G,L,Gr]),
+	ask_input([SongGender, SongLanguage, SongGroup]),
 	fail.
