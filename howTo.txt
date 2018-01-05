@@ -1,0 +1,18 @@
+How to:
+
+- 1st: Get from https://query.wikidata.org/ the query.json using the query:
+
+	SELECT ?song ?songLabel ?performerLabel ?language_of_work_or_nameLabel ?genreLabel WHERE {
+	  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+	  ?song wdt:P31 wd:Q7366.
+	  ?song wdt:P175 ?performer.
+	  ?song wdt:P407 ?language_of_work_or_name.
+	  ?song wdt:P136 ?genre.
+	}
+	LIMIT 400
+ 
+	In the repository is the query.json I got from there. Puting a higher LIMIT gets more songs form wikidata
+ 
+- 2nd: execute wikidataToProlog.py to get the file songs.pl
+
+- 3rd: load swipl with both song_recommender.pl and the new songs.pl 
