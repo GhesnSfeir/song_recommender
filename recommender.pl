@@ -28,7 +28,7 @@ ask_input(Labels, SongName) :-
 	read(Option),
 	(Option == 1 ->  !, nl, increase_score(Labels), delete_song(SongName);
 	Option == 2 -> !, nl, decrease_score(Labels), delete_song(SongName);
-	Option == 3 -> !, delete_song(SongName), nl;
+	Option == 3 -> !, nl;
 	write("Invalid option.") -> nl, fail).
 
 increase_score([]).
@@ -78,13 +78,14 @@ calculate_score(Gender, Language, Group, Score):-
 
 fetch_recommended_song(SongName, SongGender, SongLanguage, SongGroup, SongScore):-
     get_max_score(MaxScore),
+    MinScore is MaxScore / 2,
     findall(
         (Song, Gender, Language, Group, Score),
-        (song(Song, Gender, Language, Group), calculate_score(Gender, Language, Group, Score), Score = MaxScore),
+        (song(Song, Gender, Language, Group), calculate_score(Gender, Language, Group, Score), Score >= MinScore),
         Songlist),
     length(Songlist, Length),
-    %random(0, Length, Index),
-    nth0(0, Songlist, (SongName, SongGender, SongLanguage, SongGroup, SongScore)).
+    random(0, Length, Index),
+    nth0(Index, Songlist, (SongName, SongGender, SongLanguage, SongGroup, SongScore)).
 
 main() :-
 	repeat,
