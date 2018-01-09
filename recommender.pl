@@ -48,12 +48,14 @@ decrease_score([Label|Rest]) :-
 delete_song(SongName) :- retract(song(SongName,_,_,_)).
 	
 	
-display_song(SongName, SongGroup, SongScore):-
+display_song(SongName, SongGroup, SongGender, SongScore):-
     write("Now playing: "),
     write(SongName),
     write(", by "),
     write(SongGroup),
-    write(". Score: "),
+    write(" ("),
+    write(SongGender),
+    write("). Score: "),
     write(SongScore),
     nl.
 
@@ -78,7 +80,7 @@ calculate_score(Gender, Language, Group, Score):-
 
 fetch_recommended_song(SongName, SongGender, SongLanguage, SongGroup, SongScore):-
     get_max_score(MaxScore),
-    MinScore is MaxScore / 2,
+    MinScore is (MaxScore * 2) / 3,
     findall(
         (Song, Gender, Language, Group, Score),
         (song(Song, Gender, Language, Group), calculate_score(Gender, Language, Group, Score), Score >= MinScore),
@@ -91,7 +93,7 @@ main() :-
 	repeat,
     
     fetch_recommended_song(SongName, SongGender, SongLanguage, SongGroup, SongScore),
-    display_song(SongName, SongGroup, SongScore),
+    display_song(SongName, SongGroup, SongGender, SongScore),
     display_options(),
 	
 	ask_input([SongGender, SongLanguage, SongGroup], SongName),
